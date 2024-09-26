@@ -40,6 +40,7 @@ public class Paciente {
 	private Integer idade;
 	private boolean tabagista;
 	private boolean etilista;
+	@Enumerated(EnumType.STRING)
 	private NivelDePrioridade nivelDePrioridade;
 	private boolean lesaoSuspeita;
 }
