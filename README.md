@@ -8,8 +8,7 @@
     3. Abra o terminal no repositório
     4. Execute o comando: docker-compose up --build
     5. A aplicação está no ar! http://localhost:8080/pacientes
-    Obs: Caso queira ter acesso a documentação mais detalhada entre no link: 
-    http://localhost:8080/swagger-ui/index.html
+    Obs: Caso queira ter acesso a documentação mais detalhada entre no link: http://localhost:8080/swagger-ui/index.html
 ## 📝 Testes unitários - Como rodar
     Após fazer o clone do repositórios e seguir os passos acima, execute as seguintes etapas:
     1. Abra o terminal no repositório
