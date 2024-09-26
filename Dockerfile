@@ -1,7 +1,7 @@
 # FROM maven:3.8.2-jdk-8 # for Java 8
 FROM jelastic/maven:3.9.5-openjdk-21
 
-WORKDIR /crud-sobrevidas
+WORKDIR /CRUD-JavaSpring-Sobrevidas
 COPY . .
 RUN mvn clean install
 
