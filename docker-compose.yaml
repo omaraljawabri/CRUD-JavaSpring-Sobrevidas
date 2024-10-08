@@ -12,13 +12,16 @@ services:
       - "5433:5432"
     volumes:
       - db:/var/lib/postgres
+    networks:
+      - keycloak_network
   app:
     depends_on:
       - postgresdb
+      - keycloak
     build: .
     restart: on-failure
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
       SPRING_APPLICATION_JSON: '{
         "spring.datasource.url"  : "jdbc:postgresql://postgresdb:5432/sobrevidas_db",
@@ -27,6 +30,34 @@ services:
         "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.PostgreSQLDialect",
         "spring.jpa.hibernate.ddl-auto" : "update"
        }'
+    networks:
+      - keycloak_network
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    command: start
+    environment:
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT_BACKCHANNEL: false
+      KC_HTTP_ENABLED: true
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HEALTH_ENABLED: true
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgresdb:5432/sobrevidas_db
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: 123456
+    ports:
+      - 8080:8080
+    restart: always
+    depends_on:
+      - postgresdb
+    networks:
+      - keycloak_network
 
 volumes:
   db:
+networks:
+  keycloak_network:
+    driver: bridge
