@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("pacientes")
+@RequestMapping("/pacientes")
 @RequiredArgsConstructor
 public class PacienteController {
 	private final PacienteService pacienteService;
@@ -36,6 +37,7 @@ public class PacienteController {
 			@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos dados")
 	})
 	@GetMapping
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<Paciente>> listarTodos(){
 		return ResponseEntity.ok(pacienteService.listarTodos());
 	}
@@ -46,6 +48,7 @@ public class PacienteController {
 			@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos dados")
 	})
 	@GetMapping(path = "/{id}")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Paciente> encontrarPeloId(@PathVariable long id){
 		return ResponseEntity.ok(pacienteService.encontrarPeloId(id));
 	}
@@ -56,6 +59,7 @@ public class PacienteController {
 			@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos dados")
 	})
 	@GetMapping(path =  "/pesquisar")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<Paciente>> encontrarPeloNome(@RequestParam String nome){
 		return ResponseEntity.ok(pacienteService.encontrarPeloNome(nome));
 	}
@@ -67,6 +71,7 @@ public class PacienteController {
 			@ApiResponse(responseCode = "500", description = "Erro ao realizar cadastro de paciente")
 	})
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Paciente> salvarPaciente(@RequestBody @Valid PacientePost pacientePost){
 		return new ResponseEntity<>(pacienteService.salvarPaciente(pacientePost), HttpStatus.CREATED);
 	}
@@ -77,6 +82,7 @@ public class PacienteController {
 			@ApiResponse(responseCode = "500", description = "Erro ao atualizar paciente")
 	})
 	@PutMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Void> update(@Valid @RequestBody Paciente paciente){
 		pacienteService.update(paciente);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -88,6 +94,7 @@ public class PacienteController {
 			@ApiResponse(responseCode = "500", description = "Erro ao deletar paciente")
 	})
 	@DeleteMapping(path = "/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Void> deletarPaciente(@PathVariable long id) {
 		pacienteService.remover(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);

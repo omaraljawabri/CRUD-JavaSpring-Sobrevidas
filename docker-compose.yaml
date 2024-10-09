@@ -1,35 +1,16 @@
 version: "3.8"
 
 services:
-  postgresdb:
+  postgres:
     image: postgres
-    restart: unless-stopped
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=sobrevidas_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: sobrevidas_db
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
-      - db:/var/lib/postgres
-    networks:
-      - keycloak_network
-  app:
-    depends_on:
-      - postgresdb
-      - keycloak
-    build: .
-    restart: on-failure
-    ports:
-      - "8081:8081"
-    environment:
-      SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url"  : "jdbc:postgresql://postgresdb:5432/sobrevidas_db",
-        "spring.datasource.username" : "postgres",
-        "spring.datasource.password" : "123456",
-        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.PostgreSQLDialect",
-        "spring.jpa.hibernate.ddl-auto" : "update"
-       }'
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - keycloak_network
   keycloak:
@@ -45,19 +26,33 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: password
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgresdb:5432/sobrevidas_db
+      KC_DB_URL: jdbc:postgresql://postgres:5432/sobrevidas_db
       KC_DB_USERNAME: postgres
       KC_DB_PASSWORD: 123456
     ports:
-      - 8080:8080
+      - "8080:8080"
     restart: always
     depends_on:
-      - postgresdb
+      - postgres
     networks:
       - keycloak_network
-
+  app:
+    depends_on:
+      - postgres
+      - keycloak
+    build: .
+    ports:
+      - "8081:8081"
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=sobrevidas_db
+    networks:
+      - keycloak_network
 volumes:
-  db:
+  postgres-data:
 networks:
   keycloak_network:
     driver: bridge
