@@ -37,7 +37,6 @@ public class PacienteController {
 			@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos dados")
 	})
 	@GetMapping
-	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<Paciente>> listarTodos(){
 		return ResponseEntity.ok(pacienteService.listarTodos());
 	}
@@ -48,7 +47,6 @@ public class PacienteController {
 			@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos dados")
 	})
 	@GetMapping(path = "/{id}")
-	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Paciente> encontrarPeloId(@PathVariable long id){
 		return ResponseEntity.ok(pacienteService.encontrarPeloId(id));
 	}
@@ -59,7 +57,6 @@ public class PacienteController {
 			@ApiResponse(responseCode = "500", description = "Erro ao realizar busca dos dados")
 	})
 	@GetMapping(path =  "/pesquisar")
-	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<List<Paciente>> encontrarPeloNome(@RequestParam String nome){
 		return ResponseEntity.ok(pacienteService.encontrarPeloNome(nome));
 	}
@@ -71,7 +68,6 @@ public class PacienteController {
 			@ApiResponse(responseCode = "500", description = "Erro ao realizar cadastro de paciente")
 	})
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Paciente> salvarPaciente(@RequestBody @Valid PacientePost pacientePost){
 		return new ResponseEntity<>(pacienteService.salvarPaciente(pacientePost), HttpStatus.CREATED);
 	}
@@ -82,7 +78,6 @@ public class PacienteController {
 			@ApiResponse(responseCode = "500", description = "Erro ao atualizar paciente")
 	})
 	@PutMapping
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Void> update(@Valid @RequestBody Paciente paciente){
 		pacienteService.update(paciente);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -94,7 +89,6 @@ public class PacienteController {
 			@ApiResponse(responseCode = "500", description = "Erro ao deletar paciente")
 	})
 	@DeleteMapping(path = "/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Void> deletarPaciente(@PathVariable long id) {
 		pacienteService.remover(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
