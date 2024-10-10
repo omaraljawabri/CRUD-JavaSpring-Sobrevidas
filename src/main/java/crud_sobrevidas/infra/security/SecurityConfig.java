@@ -22,7 +22,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/token/").permitAll()
                         .requestMatchers(HttpMethod.POST, "/pacientes").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/pacientes").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/pacientes").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/pacientes/{id}").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 );
         return httpSecurity.build();
