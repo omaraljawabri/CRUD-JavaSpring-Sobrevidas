@@ -15,7 +15,9 @@ services:
       - keycloak_network
   keycloak:
     image: quay.io/keycloak/keycloak:latest
-    command: start
+    command: start --import-realm
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
     environment:
       KC_HOSTNAME: localhost
       KC_HOSTNAME_PORT: 8080
