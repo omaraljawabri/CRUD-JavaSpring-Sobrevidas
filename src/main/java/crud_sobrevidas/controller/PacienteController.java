@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class PacienteController {
 	private final PacienteService pacienteService;
 	
-	@Operation(summary = "Busca por todos os pacientes cadastrados", method = "GET")
+	@Operation(summary = "Busca por todos os pacientes cadastrados no banco de dados", method = "GET")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Busca efetuada com sucesso"),
 			@ApiResponse(responseCode = "401", description = "Usuário não foi autorizado"),
@@ -46,7 +46,7 @@ public class PacienteController {
 		return ResponseEntity.ok(pacienteService.listarTodos());
 	}
 	
-	@Operation(summary = "Busca por paciente pelo id", method = "GET")
+	@Operation(summary = "Busca por paciente de acordo com seu id(identificador único) no banco de dados", method = "GET")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Busca efetuada com sucesso"),
 			@ApiResponse(responseCode = "401", description = "Usuário não foi autorizado"),
@@ -58,7 +58,7 @@ public class PacienteController {
 		return ResponseEntity.ok(pacienteService.encontrarPeloId(id));
 	}
 	
-	@Operation(summary = "Busca paciente pelo nome", method = "GET")
+	@Operation(summary = "Busca paciente pelo seu nome registrado no banco de dados", method = "GET")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Busca efetuada com sucesso"),
 			@ApiResponse(responseCode = "401", description = "Usuário não foi autorizado"),
@@ -96,7 +96,7 @@ public class PacienteController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
-	@Operation(summary = "Deleta paciente de acordo com o id passado", method = "DELETE")
+	@Operation(summary = "Deleta paciente do banco de dados de acordo com o id(identificador único) passado", method = "DELETE")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "204", description = "Paciente deletado com sucesso"),
 			@ApiResponse(responseCode = "401", description = "Usuário não foi autorizado"),
